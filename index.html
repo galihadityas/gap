@@ -1479,31 +1479,40 @@ window.EditorToolbar = EditorToolbar;
 //   }/*EDITMODE-END*/;
 //
 //   function PasswordGate({ onSuccess }) {
-  const [pw, setPw] = React.useState('');
-  const [error, setError] = React.useState(false);
-  const check = () => {
-    if (pw === '880306') { onSuccess(); }
-    else { setError(true); setPw(''); }
-  };
+  const [pw, setPw] = React.useState("");
+  const [hasError, setHasError] = React.useState(false);
+
+  function check() {
+    if (pw === "880306") {
+      onSuccess();
+    } else {
+      setHasError(true);
+      setPw("");
+    }
+  }
+
+  const wrapStyle = { position: "fixed", inset: 0, background: "#000", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999 };
+  const cardStyle = { background: "#111", padding: "2.5rem", borderRadius: 8, minWidth: 320, textAlign: "center", border: "1px solid #222" };
+  const titleStyle = { fontSize: 18, fontWeight: 600, marginBottom: "1.5rem", letterSpacing: "0.05em", color: "#fff" };
+  const inputStyle = { width: "100%", padding: "10px 14px", borderRadius: 6, border: hasError ? "1px solid #ef4444" : "1px solid #333", background: "#1a1a1a", color: "#fff", fontSize: 15, marginBottom: 8, textAlign: "center", letterSpacing: 4, outline: "none" };
+  const btnStyle = { width: "100%", padding: "10px", background: "#fff", color: "#111", border: "none", borderRadius: 6, fontSize: 14, fontWeight: 600, cursor: "pointer", marginTop: 8 };
+  const errStyle = { color: "#ef4444", fontSize: 13, marginBottom: 8 };
+
   return (
-    <div style={{position:'fixed',inset:0,background:'#000',display:'flex',alignItems:'center',justifyContent:'center',zIndex:9999}}>
-      <div style={{background:'#111',padding:'2.5rem',borderRadius:8,minWidth:320,textAlign:'center',border:'1px solid #222'}}>
-        <div style={{marginBottom:'1.5rem',fontSize:28,letterSpacing:2}}>&#128274;</div>
-        <h2 style={{fontSize:18,fontWeight:600,marginBottom:'1.5rem',letterSpacing:'0.05em',color:'#fff'}}>Admin Access</h2>
+    <div style={wrapStyle}>
+      <div style={cardStyle}>
+        <h2 style={titleStyle}>Admin Access</h2>
         <input
           type="password"
           value={pw}
-          onChange={e => { setPw(e.target.value); setError(false); }}
-          onKeyDown={e => e.key === 'Enter' && check()}
+          onChange={(e) => { setPw(e.target.value); setHasError(false); }}
+          onKeyDown={(e) => { if (e.key === "Enter") check(); }}
           placeholder="Enter password"
           autoFocus
-          style={{width:'100%',padding:'10px 14px',borderRadius:6,border:error ? '1px solid #ef4444' : '1px solid #333',background:'#1a1a1a',color:'#fff',fontSize:15,marginBottom:8,textAlign:'center',letterSpacing:4,outline:'none'}}
+          style={inputStyle}
         />
-        {error && <p style={{color:'#ef4444',fontSize:13,marginBottom:8}}>Incorrect password</p>}
-        <button
-          onClick={check}
-          style={{width:'100%',padding:'10px',background:'#fff',color:'#111',border:'none',borderRadius:6,fontSize:14,fontWeight:600,cursor:'pointer',marginTop:8}}
-        >Enter</button>
+        {hasError && <p style={errStyle}>Incorrect password</p>}
+        <button onClick={check} style={btnStyle}>Enter</button>
       </div>
     </div>
   );
