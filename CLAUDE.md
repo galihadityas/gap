@@ -1,3 +1,7 @@
+# Website files are off limits
+
+This repo serves a live website. Never modify, rename, or delete the site files (`index.html`, `20260505_index.html`, `CNAME`, and any other file the site serves) without the owner's explicit permission in the current conversation. Ask first, and say exactly what you will change. Repo tooling under `.claude/` and this file are fine to change through a pull request.
+
 # Model routing (always on)
 
 This is a standing request from the repo owner: route work to the cheapest model that can do it correctly, without waiting to be asked. Follow `.claude/skills/delegate/SKILL.md` for every task in this repo.
