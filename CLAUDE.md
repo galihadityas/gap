@@ -2,18 +2,29 @@
 
 This repo serves a live website. Never modify, rename, or delete the site files (`index.html`, `20260505_index.html`, `CNAME`, and any other file the site serves) without the owner's explicit permission in the current conversation. Ask first, and say exactly what you will change. Repo tooling under `.claude/` and this file are fine to change through a pull request.
 
-# Model routing (always on)
+# Model routing (always on, silent)
 
-This is a standing request from the repo owner: route work to the cheapest model that can do it correctly, without waiting to be asked. Follow `.claude/skills/delegate/SKILL.md` for every task in this repo.
+Standing instruction from the repo owner: on every request, route work to the cheapest model that will do it reliably. No trigger word is needed. Do not narrate routing unless asked.
 
-On every request, before acting:
+Delegation pays only when a worker absorbs volume the main model would otherwise read or produce. Judge by that, not by how "easy" the task sounds.
 
-1. Size the work. If it takes 1-2 tool calls, or it is a plain question you can answer from context, do it inline. No subagent.
-2. Split it. Separate the judgment (design, debugging, tradeoffs, final answer) from the mechanical parts (searching, reading many files, summarizing, pattern-following edits).
-3. Route the mechanical parts:
-   - Read-only lookup or summarizing: `Explore` or `general-purpose` with `model: "haiku"`.
-   - Small edits that copy an existing pattern (1-3 files): `general-purpose` with `model: "sonnet"`.
-   - More than 3 files, subtle logic (regex, dates, concurrency), or a failed Haiku run: go up one tier.
-4. Keep the judgment inline. Never delegate to `opus`, and never delegate risky work (secrets, deletions, force-push, deploys).
-5. Verify what comes back (read the diff, spot-check a cited `file:line`) before using it.
-6. End the reply with one line naming what went to which model, or "All inline" when nothing was delegated.
+Keep inline (main model):
+- Anything whose input is already in the conversation: grammar, rewriting, translation, short summaries, explanations, calculations, classification. Answering directly is cheaper than briefing a worker.
+- Tiny work: one short file, one obvious edit, one search.
+- Judgment: architecture, ambiguous or hard debugging (concurrency, distributed, intermittent), security, auth, credentials, permissions, deploys, destructive or irreversible operations, financial math, strategy, final integration.
+
+Delegate to `light-worker` (Haiku):
+- Searching the repo, locating references, reading many files to extract facts, summarizing long logs or files, uniform mechanical edits across many files (size alone does not make it hard).
+
+Delegate to `medium-worker` (Sonnet):
+- A contained feature or module refactor with a clear spec, tests following existing patterns, first-pass review of a small diff, multi-step transformations.
+
+Mixed requests: keep planning, decisions and verification inline; send the mechanical slices down. Never send mechanical work to an Opus-class agent.
+
+Briefs: task, context (paths, pattern to copy), what not to touch, done-when, compact return format. Run independent briefs in parallel.
+
+Escalation: read the worker's final STATUS line.
+- DONE: verify proportionally (diff and checks for edits, spot-check one file:line for searches; skip for trivial transforms).
+- PARTIAL or ESCALATE, failed checks, or a wrong result: re-brief one tier up (light-worker -> medium-worker -> main). Never retry the same tier on the same task.
+
+The main model owns the final answer: one coherent response to the user.
