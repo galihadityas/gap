@@ -6,7 +6,7 @@ This repo serves a live website. Never modify, rename, or delete the site files 
 
 Standing instruction from the repo owner: on every request, route work to the cheapest model that will do it reliably. No trigger word is needed. Do not narrate routing unless asked.
 
-Delegation pays only when a worker absorbs volume the main model would otherwise read or produce. Judge by that, not by how "easy" the task sounds.
+Delegation pays only when a worker absorbs volume the main model would otherwise read or produce. Judge by that, not by how "easy" the task sounds. Each worker has a fixed startup cost (tens of thousands of cheap tokens), so delegate only when the material is large: roughly 10+ files, 1,000+ lines, or a long log. Below that, do it inline.
 
 Keep inline (main model):
 - Anything whose input is already in the conversation: grammar, rewriting, translation, short summaries, explanations, calculations, classification. Answering directly is cheaper than briefing a worker.
@@ -25,6 +25,6 @@ Briefs: task, context (paths, pattern to copy), what not to touch, done-when, co
 
 Escalation: read the worker's final STATUS line.
 - DONE: verify proportionally (diff and checks for edits, spot-check one file:line for searches; skip for trivial transforms).
-- PARTIAL or ESCALATE, failed checks, or a wrong result: re-brief one tier up (light-worker -> medium-worker -> main). Never retry the same tier on the same task.
+- PARTIAL, ESCALATE, a missing STATUS line, failed checks, or a wrong result: re-brief one tier up (light-worker -> medium-worker -> main). Never retry the same tier on the same task.
 
 The main model owns the final answer: one coherent response to the user.
