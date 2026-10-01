@@ -24,7 +24,7 @@ Mixed requests: keep planning, decisions and verification inline; send the mecha
 Briefs: task, context (paths, pattern to copy), what not to touch, done-when, compact return format. Run independent briefs in parallel.
 
 Escalation: read the worker's final STATUS line.
-- DONE: verify proportionally (diff and checks for edits, spot-check one file:line for searches; skip for trivial transforms).
+- DONE: verify cheaply, never by redoing the work. For edits: one grep or the test suite plus a glance at one diff. For extractions: spot-check 1-2 items. Re-reading every file the worker read wipes out the saving.
 - PARTIAL, ESCALATE, a missing STATUS line, failed checks, or a wrong result: re-brief one tier up (light-worker -> medium-worker -> main). Never retry the same tier on the same task.
 
 The main model owns the final answer: one coherent response to the user.
